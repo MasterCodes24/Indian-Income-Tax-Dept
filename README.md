@@ -4,7 +4,7 @@ A Java-based desktop application that calculates and compares income tax liabili
 under both the **Old Regime (Income Tax Act 1961)** and the **New Regime (Finance Act 2025)**
 for Indian taxpayers, effective April 2026.
 
-Built by a 1st-year engineering student as a practical implementation of
+Built by three 1st-year engineering students as a practical implementation of
 Java OOP, Swing GUI, multithreading, and Indian tax law.
 
 ---
