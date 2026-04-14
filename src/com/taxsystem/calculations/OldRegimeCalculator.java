@@ -10,13 +10,13 @@ import com.taxsystem.models.TaxResult;
  * These slabs are age-dependent (Normal / Senior / Super Senior Citizen).
  *
  * Normal Citizen (age < 60):
- * ₹0 - ₹2.5L : Nil
- * ₹2.5L - ₹5L : 5%
- * ₹5L - ₹10L : 20%
- * Above ₹10L  : 30%
+ * Rs.0 - Rs.2.5L : Nil
+ * Rs.2.5L - Rs.5L : 5%
+ * Rs.5L - Rs.10L : 20%
+ * Above Rs.10L  : 30%
  *
- * Senior Citizen (age 60-79): Basic exemption ₹3L
- * Super Senior (age 80+): Basic exemption ₹5L, no 5% slab
+ * Senior Citizen (age 60-79): Basic exemption Rs.3L
+ * Super Senior (age 80+): Basic exemption Rs.5L, no 5% slab
  */
 public class OldRegimeCalculator {
 
@@ -29,7 +29,7 @@ public class OldRegimeCalculator {
         // Step 2: Apply age-specific slabs
         double baseTax = calculateAgeBasedTax(taxableIncome, taxpayer.getAge());
 
-        // Step 3: Apply Section 87A Rebate (Old Regime: only up to ₹5L income)
+        // Step 3: Apply Section 87A Rebate (Old Regime: only up to Rs.5L income)
         if (taxableIncome <= 500000) {
             double rebate = Math.min(baseTax, 12500);
             baseTax = baseTax - rebate;
@@ -60,7 +60,7 @@ public class OldRegimeCalculator {
     }
 
     private double calculateSeniorTax(double income) {
-        // Basic exemption limit is ₹3L for seniors
+        // Basic exemption limit is Rs.3L for seniors
         double tax = 0;
         if (income <= 300000) return 0;
         if (income > 300000)  tax += Math.min(income - 300000, 200000) * 0.05;
@@ -70,7 +70,7 @@ public class OldRegimeCalculator {
     }
 
     private double calculateSuperSeniorTax(double income) {
-        // Basic exemption is ₹5L, no 5% slab
+        // Basic exemption is Rs.5L, no 5% slab
         double tax = 0;
         if (income <= 500000)  return 0;
         if (income > 500000)   tax += Math.min(income - 500000, 500000) * 0.20;

@@ -12,20 +12,20 @@ import com.taxsystem.models.TaxResult;
  *
  * SLAB STRUCTURE (After Standard Deduction):
  * ─────────────────────────────────────────
- * ₹0          to ₹4,00,000   →  Nil  (0%)
- * ₹4,00,001   to ₹8,00,000   →  5%
- * ₹8,00,001   to ₹12,00,000  →  10%
- * ₹12,00,001  to ₹16,00,000  →  15%
- * ₹16,00,001  to ₹20,00,000  →  20%
- * ₹20,00,001  to ₹24,00,000  →  25%
- * Above ₹24,00,000            →  30%
+ * Rs.0          to Rs.4,00,000   →  Nil  (0%)
+ * Rs.4,00,001   to Rs.8,00,000   →  5%
+ * Rs.8,00,001   to Rs.12,00,000  →  10%
+ * Rs.12,00,001  to Rs.16,00,000  →  15%
+ * Rs.16,00,001  to Rs.20,00,000  →  20%
+ * Rs.20,00,001  to Rs.24,00,000  →  25%
+ * Above Rs.24,00,000            →  30%
  *
  * KEY FEATURES:
  * ─────────────────────────────────────────
- * 1. Standard Deduction : ₹75,000 (for salaried/pensioners)
- * 2. Section 87A Rebate : Full tax rebated if taxable income <= ₹12L
- * 3. Marginal Relief    : Prevents tax from exceeding income above ₹12L
- * 4. Surcharge          : Applies on incomes above ₹50 Lakh
+ * 1. Standard Deduction : Rs.75,000 (for salaried/pensioners)
+ * 2. Section 87A Rebate : Full tax rebated if taxable income <= Rs.12L
+ * 3. Marginal Relief    : Prevents tax from exceeding income above Rs.12L
+ * 4. Surcharge          : Applies on incomes above Rs.50 Lakh
  * 5. Health & Edu Cess  : 4% on (tax + surcharge) — handled in TaxResult
  *
  * NOTE: No deductions (80C, 80D, HRA, NPS etc.) are allowed
@@ -43,37 +43,37 @@ public class NewRegimeCalculator {
     private static final double STANDARD_DEDUCTION = 75000;
 
     // Section 87A: Full rebate if taxable income is at or below this
-    private static final double REBATE_INCOME_LIMIT = 1200000; // ₹12,00,000
+    private static final double REBATE_INCOME_LIMIT = 1200000; // Rs.12,00,000
 
     // Slab upper boundaries (in ascending order)
     // Index 0 = end of first slab, Index 1 = end of second slab, etc.
     private static final double[] SLAB_LIMITS = {
-        400000,   // ₹4 Lakh
-        800000,   // ₹8 Lakh
-        1200000,  // ₹12 Lakh
-        1600000,  // ₹16 Lakh
-        2000000,  // ₹20 Lakh
-        2400000   // ₹24 Lakh
-        // Above ₹24L = 30% (handled separately in calculateSlabTax)
+        400000,   // Rs.4 Lakh
+        800000,   // Rs.8 Lakh
+        1200000,  // Rs.12 Lakh
+        1600000,  // Rs.16 Lakh
+        2000000,  // Rs.20 Lakh
+        2400000   // Rs.24 Lakh
+        // Above Rs.24L = 30% (handled separately in calculateSlabTax)
     };
 
     // Tax rates corresponding to each slab
     // SLAB_RATES[i] is the rate for income between SLAB_LIMITS[i-1] and SLAB_LIMITS[i]
     private static final double[] SLAB_RATES = {
-        0.00,  // 0%  — ₹0 to ₹4L
-        0.05,  // 5%  — ₹4L to ₹8L
-        0.10,  // 10% — ₹8L to ₹12L
-        0.15,  // 15% — ₹12L to ₹16L
-        0.20,  // 20% — ₹16L to ₹20L
-        0.25,  // 25% — ₹20L to ₹24L
-        0.30   // 30% — Above ₹24L
+        0.00,  // 0%  — Rs.0 to Rs.4L
+        0.05,  // 5%  — Rs.4L to Rs.8L
+        0.10,  // 10% — Rs.8L to Rs.12L
+        0.15,  // 15% — Rs.12L to Rs.16L
+        0.20,  // 20% — Rs.16L to Rs.20L
+        0.25,  // 25% — Rs.20L to Rs.24L
+        0.30   // 30% — Above Rs.24L
     };
 
     // Surcharge thresholds and rates
-    private static final double SURCHARGE_LIMIT_1  = 5000000;   // ₹50 Lakh
-    private static final double SURCHARGE_LIMIT_2  = 10000000;  // ₹1 Crore
-    private static final double SURCHARGE_LIMIT_3  = 20000000;  // ₹2 Crore
-    private static final double SURCHARGE_LIMIT_4  = 50000000;  // ₹5 Crore
+    private static final double SURCHARGE_LIMIT_1  = 5000000;   // Rs.50 Lakh
+    private static final double SURCHARGE_LIMIT_2  = 10000000;  // Rs.1 Crore
+    private static final double SURCHARGE_LIMIT_3  = 20000000;  // Rs.2 Crore
+    private static final double SURCHARGE_LIMIT_4  = 50000000;  // Rs.5 Crore
 
     private static final double SURCHARGE_RATE_1   = 0.10; // 10%
     private static final double SURCHARGE_RATE_2   = 0.15; // 15%
@@ -96,7 +96,7 @@ public class NewRegimeCalculator {
         double grossIncome = taxpayer.getGrossIncome();
 
         // ── STEP 1: Apply Standard Deduction ──────────────────────
-        // Salaried individuals get ₹75,000 deducted from gross income.
+        // Salaried individuals get Rs.75,000 deducted from gross income.
         // This is the ONLY deduction allowed under New Regime.
         double taxableIncome = grossIncome - STANDARD_DEDUCTION;
 
@@ -111,11 +111,11 @@ public class NewRegimeCalculator {
 
         // ── STEP 3: Apply Section 87A Rebate + Marginal Relief ────
         // This is the most critical step for FY 2025-26.
-        // The new Finance Act raised this rebate limit from ₹7L to ₹12L.
+        // The new Finance Act raised this rebate limit from Rs.7L to Rs.12L.
         baseTax = applyRebateAndMarginalRelief(taxableIncome, baseTax);
 
         // ── STEP 4: Calculate Surcharge ───────────────────────────
-        // Surcharge applies only for very high incomes (above ₹50 Lakh).
+        // Surcharge applies only for very high incomes (above Rs.50 Lakh).
         // Surcharge itself has marginal relief but that is an advanced topic.
         double surcharge = calculateSurcharge(taxableIncome, baseTax);
 
@@ -138,13 +138,13 @@ public class NewRegimeCalculator {
     /**
      * Calculates tax by applying each slab progressively.
      *
-     * HOW IT WORKS (Example: income = ₹10,00,000):
+     * HOW IT WORKS (Example: income = Rs.10,00,000):
      *
-     * Slab 1: ₹0    to ₹4L   → taxed portion = ₹4,00,000 at 0%  = ₹0
-     * Slab 2: ₹4L   to ₹8L   → taxed portion = ₹4,00,000 at 5%  = ₹20,000
-     * Slab 3: ₹8L   to ₹10L  → taxed portion = ₹2,00,000 at 10% = ₹20,000
-     * Income doesn't reach ₹12L so loop stops here.
-     * Total = ₹40,000
+     * Slab 1: Rs.0    to Rs.4L   → taxed portion = Rs.4,00,000 at 0%  = Rs.0
+     * Slab 2: Rs.4L   to Rs.8L   → taxed portion = Rs.4,00,000 at 5%  = Rs.20,000
+     * Slab 3: Rs.8L   to Rs.10L  → taxed portion = Rs.2,00,000 at 10% = Rs.20,000
+     * Income doesn't reach Rs.12L so loop stops here.
+     * Total = Rs.40,000
      *
      * @param income  Taxable income after standard deduction
      * @return        Raw tax before rebate, surcharge, or cess
@@ -173,7 +173,7 @@ public class NewRegimeCalculator {
             previousLimit = SLAB_LIMITS[i];
         }
 
-        // Handle the topmost slab (above ₹24 Lakh at 30%)
+        // Handle the topmost slab (above Rs.24 Lakh at 30%)
         // This is not in the loop because it has no upper boundary
         if (income > SLAB_LIMITS[SLAB_LIMITS.length - 1]) {
             double incomeAboveTopSlab = income - SLAB_LIMITS[SLAB_LIMITS.length - 1];
@@ -193,25 +193,25 @@ public class NewRegimeCalculator {
      *
      * THREE SCENARIOS:
      *
-     * SCENARIO A — Income <= ₹12,00,000:
-     *   Full tax is rebated. Final tax = ₹0.
-     *   Example: Taxable = ₹11,00,000 → Tax = ₹42,500 → After rebate = ₹0
+     * SCENARIO A — Income <= Rs.12,00,000:
+     *   Full tax is rebated. Final tax = Rs.0.
+     *   Example: Taxable = Rs.11,00,000 → Tax = Rs.42,500 → After rebate = Rs.0
      *
-     * SCENARIO B — Income slightly above ₹12,00,000 (Marginal Relief zone):
-     *   Without relief, earning ₹1 extra above ₹12L would suddenly
+     * SCENARIO B — Income slightly above Rs.12,00,000 (Marginal Relief zone):
+     *   Without relief, earning Rs.1 extra above Rs.12L would suddenly
      *   cost you thousands in tax — that's unfair.
      *   Marginal Relief Rule: Tax payable cannot EXCEED the amount
-     *   by which income exceeds ₹12,00,000.
+     *   by which income exceeds Rs.12,00,000.
      *
-     *   Example: Taxable = ₹12,10,000 (₹10,000 above ₹12L)
-     *   Raw Tax = ₹63,000 (approx)
-     *   Without relief you'd pay ₹63,000 on just ₹10,000 extra — absurd!
-     *   With marginal relief → Tax capped at ₹10,000
+     *   Example: Taxable = Rs.12,10,000 (Rs.10,000 above Rs.12L)
+     *   Raw Tax = Rs.63,000 (approx)
+     *   Without relief you'd pay Rs.63,000 on just Rs.10,000 extra — absurd!
+     *   With marginal relief → Tax capped at Rs.10,000
      *
-     * SCENARIO C — Income well above ₹12,00,000:
+     * SCENARIO C — Income well above Rs.12,00,000:
      *   Eventually the raw tax naturally exceeds the excess income.
      *   No relief applies. Full slab tax is charged.
-     *   Example: Taxable = ₹15,00,000 → Full tax applies normally.
+     *   Example: Taxable = Rs.15,00,000 → Full tax applies normally.
      *
      * @param taxableIncome  Income after standard deduction
      * @param baseTax        Raw slab tax before any rebate
@@ -220,19 +220,19 @@ public class NewRegimeCalculator {
     private double applyRebateAndMarginalRelief(double taxableIncome,
                                                  double baseTax) {
 
-        // SCENARIO A: Full rebate — income within the ₹12L limit
+        // SCENARIO A: Full rebate — income within the Rs.12L limit
         if (taxableIncome <= REBATE_INCOME_LIMIT) {
             return 0.0; // Zero tax. This is legally correct per Finance Act 2025.
         }
 
-        // SCENARIO B & C: Income is above ₹12L
+        // SCENARIO B & C: Income is above Rs.12L
         // Check if Marginal Relief is applicable
         double excessIncomeAboveLimit = taxableIncome - REBATE_INCOME_LIMIT;
 
         if (baseTax > excessIncomeAboveLimit) {
             // SCENARIO B: Tax exceeds the excess income
             // Apply marginal relief — cap tax at the excess income amount
-            // The taxpayer pays only what they "extra earned" above ₹12L
+            // The taxpayer pays only what they "extra earned" above Rs.12L
             return excessIncomeAboveLimit;
         }
 
@@ -250,13 +250,13 @@ public class NewRegimeCalculator {
      * Calculates surcharge on tax for high-income earners.
      *
      * Surcharge is a tax ON the tax (not on income directly).
-     * It applies only when taxable income crosses ₹50 Lakh.
+     * It applies only when taxable income crosses Rs.50 Lakh.
      *
      * SURCHARGE TABLE:
-     * ₹50L  to ₹1Cr  → 10% of baseTax
-     * ₹1Cr  to ₹2Cr  → 15% of baseTax
-     * ₹2Cr  to ₹5Cr  → 25% of baseTax
-     * Above ₹5Cr      → 37% of baseTax
+     * Rs.50L  to Rs.1Cr  → 10% of baseTax
+     * Rs.1Cr  to Rs.2Cr  → 15% of baseTax
+     * Rs.2Cr  to Rs.5Cr  → 25% of baseTax
+     * Above Rs.5Cr      → 37% of baseTax
      *
      * NOTE: Under New Regime, surcharge is CAPPED at 25%
      * (The 37% slab was removed for New Regime in Budget 2023).
@@ -264,11 +264,11 @@ public class NewRegimeCalculator {
      *
      * @param taxableIncome  Income after standard deduction
      * @param baseTax        Tax after rebate (used as surcharge base)
-     * @return               Surcharge amount (₹0 if income <= ₹50L)
+     * @return               Surcharge amount (Rs.0 if income <= Rs.50L)
      */
     private double calculateSurcharge(double taxableIncome, double baseTax) {
 
-        // No surcharge for incomes up to ₹50 Lakh
+        // No surcharge for incomes up to Rs.50 Lakh
         if (taxableIncome <= SURCHARGE_LIMIT_1) {
             return 0.0;
         }
@@ -276,18 +276,18 @@ public class NewRegimeCalculator {
         double surchargeRate;
 
         if (taxableIncome <= SURCHARGE_LIMIT_2) {
-            surchargeRate = SURCHARGE_RATE_1; // 10% for ₹50L to ₹1Cr
+            surchargeRate = SURCHARGE_RATE_1; // 10% for Rs.50L to Rs.1Cr
 
         } else if (taxableIncome <= SURCHARGE_LIMIT_3) {
-            surchargeRate = SURCHARGE_RATE_2; // 15% for ₹1Cr to ₹2Cr
+            surchargeRate = SURCHARGE_RATE_2; // 15% for Rs.1Cr to Rs.2Cr
 
         } else if (taxableIncome <= SURCHARGE_LIMIT_4) {
-            surchargeRate = SURCHARGE_RATE_3; // 25% for ₹2Cr to ₹5Cr
+            surchargeRate = SURCHARGE_RATE_3; // 25% for Rs.2Cr to Rs.5Cr
 
         } else {
             // NEW REGIME SPECIFIC RULE (Budget 2023 amendment):
             // Surcharge is CAPPED at 25% under New Regime.
-            // Old Regime allows 37% above ₹5Cr. New Regime does NOT.
+            // Old Regime allows 37% above Rs.5Cr. New Regime does NOT.
             // This makes New Regime more beneficial for ultra-high earners.
             surchargeRate = SURCHARGE_RATE_3; // 25% cap — NOT 37%
         }
@@ -323,37 +323,37 @@ public class NewRegimeCalculator {
         sb.append("  NEW REGIME — STEP BY STEP BREAKDOWN\n");
         sb.append("=".repeat(55)).append("\n\n");
 
-        sb.append(String.format("  Gross Income            : ₹%,10.0f%n", grossIncome));
-        sb.append(String.format("  Less: Standard Deduction: ₹%,10.0f%n", STANDARD_DEDUCTION));
+        sb.append(String.format("  Gross Income            : Rs.%,10.0f%n", grossIncome));
+        sb.append(String.format("  Less: Standard Deduction: Rs.%,10.0f%n", STANDARD_DEDUCTION));
         sb.append(String.format("  ──────────────────────────────────%n"));
-        sb.append(String.format("  Taxable Income          : ₹%,10.0f%n%n", taxableIncome));
+        sb.append(String.format("  Taxable Income          : Rs.%,10.0f%n%n", taxableIncome));
 
         sb.append("  SLAB-WISE TAX:\n");
         sb.append(slabBreakdownString(taxableIncome));
 
-        sb.append(String.format("%n  Raw Tax (before rebate) : ₹%,10.0f%n", rawSlabTax));
+        sb.append(String.format("%n  Raw Tax (before rebate) : Rs.%,10.0f%n", rawSlabTax));
 
         // Explain rebate decision
         if (taxableIncome <= REBATE_INCOME_LIMIT) {
             sb.append(String.format(
-                "  Sec 87A Rebate          : ₹%,10.0f (FULL REBATE — income ≤ ₹12L)%n",
+                "  Sec 87A Rebate          : Rs.%,10.0f (FULL REBATE — income ≤ Rs.12L)%n",
                 rawSlabTax));
         } else {
             double excess = taxableIncome - REBATE_INCOME_LIMIT;
             if (rawSlabTax > excess) {
                 sb.append(String.format(
-                    "  Marginal Relief Applied : Tax capped at ₹%,.0f%n", excess));
+                    "  Marginal Relief Applied : Tax capped at Rs.%,.0f%n", excess));
             } else {
-                sb.append("  No rebate/relief        : Income well above ₹12L\n");
+                sb.append("  No rebate/relief        : Income well above Rs.12L\n");
             }
         }
 
         sb.append(String.format("  ──────────────────────────────────%n"));
-        sb.append(String.format("  Tax After Rebate        : ₹%,10.0f%n", finalBaseTax));
-        sb.append(String.format("  Surcharge               : ₹%,10.0f%n", surcharge));
-        sb.append(String.format("  4%% Health & Edu Cess    : ₹%,10.0f%n", cess));
+        sb.append(String.format("  Tax After Rebate        : Rs.%,10.0f%n", finalBaseTax));
+        sb.append(String.format("  Surcharge               : Rs.%,10.0f%n", surcharge));
+        sb.append(String.format("  4%% Health & Edu Cess    : Rs.%,10.0f%n", cess));
         sb.append(String.format("  ──────────────────────────────────%n"));
-        sb.append(String.format("  TOTAL TAX PAYABLE       : ₹%,10.0f%n", totalTax));
+        sb.append(String.format("  TOTAL TAX PAYABLE       : Rs.%,10.0f%n", totalTax));
         sb.append(String.format("  Effective Rate          : %9.2f%%%n",
             grossIncome > 0 ? (totalTax / grossIncome * 100) : 0));
         sb.append("=".repeat(55));
@@ -370,12 +370,12 @@ public class NewRegimeCalculator {
         StringBuilder sb = new StringBuilder();
         double previousLimit = 0;
         String[] slabLabels = {
-            "  ₹0      - ₹4L   (0%) ",
-            "  ₹4L     - ₹8L   (5%) ",
-            "  ₹8L     - ₹12L (10%) ",
-            "  ₹12L    - ₹16L (15%) ",
-            "  ₹16L    - ₹20L (20%) ",
-            "  ₹20L    - ₹24L (25%) "
+            "  Rs.0      - Rs.4L   (0%) ",
+            "  Rs.4L     - Rs.8L   (5%) ",
+            "  Rs.8L     - Rs.12L (10%) ",
+            "  Rs.12L    - Rs.16L (15%) ",
+            "  Rs.16L    - Rs.20L (20%) ",
+            "  Rs.20L    - Rs.24L (25%) "
         };
 
         for (int i = 0; i < SLAB_LIMITS.length; i++) {
@@ -384,7 +384,7 @@ public class NewRegimeCalculator {
             double incomeInSlab = Math.min(income, SLAB_LIMITS[i]) - previousLimit;
             double taxInSlab    = incomeInSlab * SLAB_RATES[i];
 
-            sb.append(String.format("  %s: ₹%,8.0f × %4.0f%% = ₹%,8.0f%n",
+            sb.append(String.format("  %s: Rs.%,8.0f × %4.0f%% = Rs.%,8.0f%n",
                 slabLabels[i], incomeInSlab, SLAB_RATES[i] * 100, taxInSlab));
 
             previousLimit = SLAB_LIMITS[i];
@@ -394,7 +394,7 @@ public class NewRegimeCalculator {
         if (income > SLAB_LIMITS[SLAB_LIMITS.length - 1]) {
             double top = income - SLAB_LIMITS[SLAB_LIMITS.length - 1];
             sb.append(String.format(
-                "  Above ₹24L      (30%) : ₹%,8.0f × 30%% = ₹%,8.0f%n",
+                "  Above Rs.24L      (30%) : Rs.%,8.0f × 30%% = Rs.%,8.0f%n",
                 top, top * 0.30));
         }
 

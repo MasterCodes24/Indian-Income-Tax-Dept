@@ -6,11 +6,11 @@ import com.taxsystem.calculations.ValidationHelper;
 import com.taxsystem.models.Deductions;
 import com.taxsystem.models.TaxResult;
 import com.taxsystem.models.Taxpayer;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.*;
+import javax.swing.*;
 
 public class MainFrame extends JFrame implements ActionListener {
 
@@ -115,6 +115,7 @@ public class MainFrame extends JFrame implements ActionListener {
         statusLabel.setFont(new Font("Arial", Font.ITALIC, 12));
 
         resultArea = new JTextArea(14, 65);
+        resultArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
         resultArea.setEditable(false);
         resultArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
         resultArea.setBorder(BorderFactory.createTitledBorder("Comparison Results"));
@@ -185,8 +186,8 @@ public class MainFrame extends JFrame implements ActionListener {
         panField           = addLabeledField(panel, "PAN Number:");
         aadhaarField       = addLabeledField(panel, "Aadhaar:");
         ageField           = addLabeledField(panel, "Age:");
-        incomeField        = addLabeledField(panel, "India Gross Income (₹):");
-        foreignIncomeField = addLabeledField(panel, "Foreign Income (₹):");
+        incomeField        = addLabeledField(panel, "India Gross Income (Rs.):");
+        foreignIncomeField = addLabeledField(panel, "Foreign Income (Rs.):");
 
         panel.add(new JLabel(""));
         panel.add(new JLabel(
@@ -205,7 +206,7 @@ public class MainFrame extends JFrame implements ActionListener {
         panel.setBorder(BorderFactory.createTitledBorder(
             "Step 3 — Deductions (Old Regime Only)"));
 
-        field80C = addLabeledField(panel, "Sec 80C (max ₹1.5L):");
+        field80C = addLabeledField(panel, "Sec 80C (max Rs.1.5L):");
         field80D = addLabeledField(panel, "Sec 80D (Medical):");
 
         // HRA — will be disabled for NR status
@@ -214,7 +215,7 @@ public class MainFrame extends JFrame implements ActionListener {
         fieldHRA = new JTextField();
         panel.add(fieldHRA);
 
-        fieldNPS = addLabeledField(panel, "NPS 80CCD (max ₹50K):");
+        fieldNPS = addLabeledField(panel, "NPS 80CCD (max Rs.50K):");
 
         panel.add(new JLabel(""));
         panel.add(new JLabel(
@@ -367,7 +368,7 @@ public class MainFrame extends JFrame implements ActionListener {
         sb.append("=".repeat(65)).append("\n");
         TaxResult best = oldR.isRecommended() ? oldR : newR;
         sb.append(String.format("  GO WITH   : %s%n", best.getRegimeName()));
-        sb.append(String.format("  YOU SAVE  : ₹%,.0f in taxes%n", savings));
+        sb.append(String.format("  YOU SAVE  : Rs.%,.0f in taxes%n", savings));
         sb.append("=".repeat(65));
 
         resultArea.setText(sb.toString());
@@ -378,11 +379,11 @@ public class MainFrame extends JFrame implements ActionListener {
         String tag = r.isRecommended() ? "  ★ RECOMMENDED ★" : "";
         sb.append(String.format("  %s%s%n", r.getRegimeName(), tag));
         sb.append("-".repeat(65)).append("\n");
-        sb.append(String.format("  Taxable Income  : ₹%,.0f%n", r.getTaxableIncome()));
-        sb.append(String.format("  Base Tax        : ₹%,.0f%n",  r.getBaseTax()));
-        sb.append(String.format("  Surcharge       : ₹%,.0f%n",  r.getSurcharge()));
-        sb.append(String.format("  4%% Cess         : ₹%,.0f%n",  r.getCess()));
-        sb.append(String.format("  TOTAL TAX       : ₹%,.0f%n",  r.getTotalTax()));
+        sb.append(String.format("  Taxable Income  : Rs.%,.0f%n", r.getTaxableIncome()));
+        sb.append(String.format("  Base Tax        : Rs.%,.0f%n",  r.getBaseTax()));
+        sb.append(String.format("  Surcharge       : Rs.%,.0f%n",  r.getSurcharge()));
+        sb.append(String.format("  4%% Cess         : Rs.%,.0f%n",  r.getCess()));
+        sb.append(String.format("  TOTAL TAX       : Rs.%,.0f%n",  r.getTotalTax()));
         sb.append(String.format("  Effective Rate  : %.2f%%%n",   r.getEffectiveRate()));
     }
 

@@ -38,8 +38,8 @@ public class TaxResult {
     @Override
     public String toString() {
         return String.format(
-            "[%s] Taxable: ₹%.0f | Base Tax: ₹%.0f | Cess: ₹%.0f | " +
-            "TOTAL: ₹%.0f | Effective Rate: %.2f%%",
+            "[%s] Taxable: Rs.%.0f | Base Tax: Rs.%.0f | Cess: Rs.%.0f | " +
+            "TOTAL: Rs.%.0f | Effective Rate: %.2f%%",
             regimeName, taxableIncome, baseTax,
             healthAndEducationCess, totalTax, effectiveRate
         );

@@ -22,10 +22,10 @@ public class Deductions {
 
     /**
      * @param taxpayer         Pass the Taxpayer so we can check residential status
-     * @param section80C       PPF, ELSS, LIC premium etc. (max ₹1.5L)
+     * @param section80C       PPF, ELSS, LIC premium etc. (max Rs.1.5L)
      * @param section80D       Medical insurance premium
      * @param hra              HRA exemption amount
-     * @param nps              NPS contribution u/s 80CCD(1B) (max ₹50K)
+     * @param nps              NPS contribution u/s 80CCD(1B) (max Rs.50K)
      */
     public Deductions(Taxpayer taxpayer,
                       double section80C, double section80D,

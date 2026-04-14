@@ -121,7 +121,7 @@ public class Taxpayer {
 
     @Override
     public String toString() {
-        return String.format("Taxpayer[%s | PAN=%s | Status=%s | Income=₹%,.0f]",
+        return String.format("Taxpayer[%s | PAN=%s | Status=%s | Income=Rs.%,.0f]",
             name, pan, residentialStatus, getGrossIncome());
     }
 }
