@@ -30,21 +30,24 @@ Java OOP, Swing GUI, multithreading, and Indian tax law.
 ---
 
 ## 🏗️ Project Structure
+
+```
 src/
 └── com/
-└── taxsystem/
-├── models/
-│   ├── Taxpayer.java        ← Stores personal + residential data
-│   ├── TaxResult.java       ← Holds tax breakdown output
-│   └── Deductions.java      ← Old Regime deduction container
-├── calculations/
-│   ├── NewRegimeCalculator.java   ← Finance Act 2025 slab logic
-│   ├── OldRegimeCalculator.java   ← Income Tax Act 1961 slab logic
-│   ├── RegimeComparator.java      ← Runs both and picks the best
-│   └── ValidationHelper.java     ← PAN, Aadhaar, income validation
-└── ui/
-├── MainFrame.java       ← Main Swing window
-└── App.java             ← Entry point
+    └── taxsystem/
+        ├── models/
+        │   ├── Taxpayer.java           ← Stores personal + residential data
+        │   ├── TaxResult.java          ← Holds tax breakdown output
+        │   └── Deductions.java         ← Old Regime deduction container
+        ├── calculations/
+        │   ├── NewRegimeCalculator.java ← Finance Act 2025 slab logic
+        │   ├── OldRegimeCalculator.java ← Income Tax Act 1961 slab logic
+        │   ├── RegimeComparator.java    ← Runs both and picks the best
+        │   └── ValidationHelper.java   ← PAN, Aadhaar, income validation
+        └── ui/
+            ├── MainFrame.java          ← Main Swing window
+            └── App.java                ← Entry point
+```
 
 ---
 
